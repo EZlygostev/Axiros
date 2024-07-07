@@ -17,6 +17,8 @@ services:
       - bridge
   service_b:
     container_name: service_b
+    depends_on:
+      - rabbitmq
     build: 
       context: .
       dockerfile: ./service_b/dockerfile
@@ -31,6 +33,8 @@ services:
       - BROKER_PASSWORD=guest
   script:
     container_name: script
+    depends_on:
+      - rabbitmq
     build: 
       context: .
       dockerfile: ./script/dockerfile

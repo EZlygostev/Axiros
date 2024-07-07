@@ -6,6 +6,7 @@ import threading
 import json
 from collections import defaultdict
 import os
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -67,5 +68,12 @@ def listen_for_results():
     channel.start_consuming()
 
 if __name__ == '__main__':
+    while True:
+        try:
+            connection = pika.BlockingConnection(connection_params)
+            break
+        except:
+            time.sleep(20)
+            continue
     threading.Thread(target=listen_for_results).start()
     app.run(host='0.0.0.0', port=5001)

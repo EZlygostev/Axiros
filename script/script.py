@@ -51,4 +51,11 @@ def process_tasks():
     channel.start_consuming()
 
 if __name__ == '__main__':
+    while True:
+        try:
+            connection = pika.BlockingConnection(connection_params)
+            break
+        except:
+            time.sleep(20)
+            continue
     process_tasks()
