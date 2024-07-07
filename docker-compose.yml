@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    restart: always
+    ports:
+      - 15672:15672
+    networks:
+      - bridge
+  service_a:
+    container_name: service_a
+    build:
+      context: .
+      dockerfile: ./service_a/dockerfile
+    networks:
+      - bridge
+  service_b:
+    container_name: service_b
+    build: 
+      context: .
+      dockerfile: ./service_b/dockerfile
+    ports:
+      - 5001:5001
+    networks:
+      - bridge
+    environment:
+      - BROKER_HOST=rabbitmq
+      - BROKER_PORT=5672
+      - BROKER_USER=guest
+      - BROKER_PASSWORD=guest
+  script:
+    container_name: script
+    build: 
+      context: .
+      dockerfile: ./script/dockerfile
+    networks:
+      - bridge
+    environment:
+    - BROKER_HOST=rabbitmq
+    - BROKER_PORT=5672
+    - BROKER_USER=guest
+    - BROKER_PASSWORD=guest
+networks:
+  bridge:
+    driver: bridge
